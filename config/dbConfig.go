@@ -4,6 +4,8 @@ import (
 	"log"
 	"math/rand"
 	"time"
+	"reflect"
+	"unsafe"
 
 	"github.com/cockroachdb/pebble"
 	"github.com/dgraph-io/badger/v3"
@@ -49,14 +51,24 @@ func RocksDbConn() *gorocksdb.DB {
 	return db
 }
 
-func RandStr(length int) string {
+func RandStr(length int) []byte {
 	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	bytes := []byte(str)
+	bytes := String2Bytes(str)
 	result := []byte{}
 	rand.Seed(time.Now().UnixNano() + int64(rand.Intn(100)))
 	for i := 0; i < length; i++ {
 		result = append(result, bytes[rand.Intn(len(bytes))])
 	}
-	return string(result)
+	return result
+}
+
+func String2Bytes(s string) []byte {
+    sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+    bh := reflect.SliceHeader{
+        Data: sh.Data,
+        Len:  sh.Len,
+        Cap:  sh.Len,
+    }
+    return *(*[]byte)(unsafe.Pointer(&bh))
 }
 

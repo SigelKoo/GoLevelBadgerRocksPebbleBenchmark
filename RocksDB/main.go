@@ -16,7 +16,7 @@ func (rdb Rocksdb) WriteBatchData(num int) (error, bool) {
 	wo.SetSync(false)
 	wb := gorocksdb.NewWriteBatch()
 	for i := 0; i < num; i++ {
-		wb.Put([]byte(config.RandStr(64)), []byte(config.RandStr(1024)))
+		wb.Put(config.RandStr(64), config.RandStr(1024))
 	}
 	err := rdb.db.Write(wo, wb)
 	if err != nil {

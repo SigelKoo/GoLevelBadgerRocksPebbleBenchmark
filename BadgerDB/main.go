@@ -15,7 +15,7 @@ func (bdb Badgerdb) WriteBatchData(num int) (error, bool) {
 	wb := bdb.db.NewWriteBatch()
 
 	for i := 0; i < num; i++ {
-		wb.Set([]byte(config.RandStr(64)), []byte(config.RandStr(1024)))
+		wb.Set(config.RandStr(64), config.RandStr(1024))
 	}
 	err := wb.Flush()
 	if err != nil {

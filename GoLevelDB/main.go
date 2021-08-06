@@ -16,13 +16,12 @@ func (ldb GoLeveldb) WriteBatchData(num int) (bool, error) {
 	batch := new(leveldb.Batch)
 
 	for i := 0; i < num; i++ {
-		batch.Put(config.RandStr(64), config.RandStr(1024))
+		batch.Put(config.RandStr(i), []byte(config.Value1024))
 	}
 
-	err := ldb.db.Write(batch, &opt.WriteOptions{Sync: false})
+	err := ldb.db.Write(batch, &opt.WriteOptions{Sync: true})
 	if err != nil {
 		log.Fatal(err)
 	}
 	return true, nil
 }
-

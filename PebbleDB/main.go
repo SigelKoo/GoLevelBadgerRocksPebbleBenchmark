@@ -15,10 +15,9 @@ func (pdb Pebbledb) WriteBatchData(num int) (bool, error) {
 	defer batch.Close()
 
 	for i := 0; i < num; i++ {
-		batch.Set(config.RandStr(64), config.RandStr(1024), &pebble.WriteOptions{Sync: false})
+		batch.Set(config.RandStr(i), []byte(config.Value1024), &pebble.WriteOptions{Sync: true})
 	}
 
-	batch.Commit(&pebble.WriteOptions{Sync: false})
+	batch.Commit(&pebble.WriteOptions{Sync: true})
 	return true, nil
 }
-
